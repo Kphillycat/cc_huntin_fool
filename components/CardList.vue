@@ -2,9 +2,12 @@
   <div>
     <div class="card-list">
       <div>
-        <button @click="goBack" class="btn">Go Back to Form</button>
+        <h3>Here's our list of recommended Credit Cards for you</h3>
       </div>
       <card v-for="(card, index) in cardsList" :card="card" :key="index" />
+      <button @click="goBack" class="btn go-back">
+        Click here to Start Over
+      </button>
     </div>
   </div>
 </template>
@@ -42,5 +45,8 @@ export default class CardList extends CardListProps {
 <style scoped>
 .card-list .btn {
   cursor: pointer;
+}
+.go-back {
+  background-color: blue;
 }
 </style>

@@ -1,14 +1,17 @@
 <template>
   <div class="container">
     <div>
-      <h1 class="title">CC Huntin Fool</h1>
-      <h2 class="subtitle">Find Credit Cards based on user preferences</h2>
-      <cc-form @submitted="handleSubmit" v-show="!formSubmitted" />
+      <h2 class="subtitle">Find The Best Credit Cards For You!</h2>
+      <cc-form @submitted="handleSubmit" v-show="!formSubmitted && !error" />
       <card-list
         @showForm="handleShowForm"
         v-bind:cards="cards"
         v-show="formSubmitted"
       />
+      <div v-show="error" class="error-text">
+        Sorry, but we don't currently have any card recommendations that meet
+        your criteria
+      </div>
     </div>
   </div>
 </template>
@@ -28,9 +31,18 @@ import CardList from '~/components/CardList.vue'
 })
 export default class Index extends Vue {
   formSubmitted = false
+  error = false
 
   get cards() {
-    if (this.formSubmitted) return this.$store.getters.filteredCards
+    const { filteredCards } = this.$store.getters
+    if (this.formSubmitted) {
+      if (filteredCards.length === 0) {
+        this.error = true
+        return filteredCards
+      }
+      return filteredCards
+    }
+
     return this.$store.getters.cards
   }
 

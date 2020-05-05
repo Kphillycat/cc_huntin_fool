@@ -1,27 +1,18 @@
 <template>
-  <!-- <div>
-    <div>{{ card.offer_name }}</div>
-    <img :src="card.offer_image" :alt="card.offer_name" />
-    <a :href="card.redirect_url">Apply Now</a>
-  </div>-->
-
   <div class="card">
     <div class="card-wrapper">
       <div>
-        <a
-          href="/the-ascent/offers/credit-cards/citi-double-cash/"
-          target="_blank"
-        >
-          <img :src="card.offer_image" :alt="card.offer_name" />
+        <a :href="'https://www.fool.com' + card.redirect_url" target="_blank">
+          <img
+            class="card-img"
+            :src="card.offer_image"
+            :alt="card.offer_name"
+          />
         </a>
       </div>
 
       <div class="apply-now">
-        <a
-          href="/the-ascent/offers/credit-cards/citi-double-cash/"
-          aria-label="Apply now button for Citi® Double Cash Card – 18 month BT offer."
-          target="_blank"
-        >
+        <a :href="'https://www.fool.com' + card.redirect_url" target="_blank">
           <span class="btn">Apply Now</span>
         </a>
       </div>
@@ -29,27 +20,24 @@
 
     <div class="card-details">
       <div>
-        <h3 class="card-sub-title">Great for: {{ card.bottom_line }}</h3>
+        <h3 class="card-sub-title">
+          <span v-html="card.bottom_line" />
+        </h3>
         <div class="card-title">
-          <a
-            href="/the-ascent/offers/credit-cards/citi-double-cash/"
-            target="_blank"
-          >
+          <a :href="'https://www.fool.com' + card.redirect_url" target="_blank">
             {{ card.offer_name }}
           </a>
         </div>
       </div>
 
-      <star-rating v-bind:rating="2.5" />
+      <star-rating v-bind:rating="card.star_rating" />
 
       <div class="why-apply">
         <h6>Why Apply</h6>
 
         <p>
           {{ card.bonus }}
-          <a
-            href="https://www.fool.com/the-ascent/credit-cards/citi-double-cash-review/"
-          >
+          <a :href="card.review_url">
             Read Full Review
           </a>
         </p>
@@ -57,7 +45,7 @@
         <div class="credit-rating">
           <h6>
             Credit Rating Requirement:
-            <span class="credit-rating_req">{{ card.credit_rating }}</span>
+            <span class="credit-rating_req">{{ creditRating }}</span>
           </h6>
         </div>
       </div>
@@ -89,15 +77,10 @@
           <br />
         </p>
       </div>
-
-      <div>
-        <h6>Bonuses &amp; Perks</h6>
-        <p>FICO score for free</p>
-      </div>
     </div>
-    <div class="what-we-like">
+    <div class="highlights">
       <h6>Highlights</h6>
-      <div class="highlights">{{ card.marketing_bullets }}</div>
+      <div class="highlights" v-html="card.marketing_bullets"></div>
     </div>
   </div>
 </template>
@@ -119,7 +102,14 @@ const CardProps = Vue.extend({
     StarRating
   }
 })
-export default class Card extends CardProps {}
+export default class Card extends CardProps {
+  get creditRating() {
+    if (this.card.credit_rating === 'goodexcellent') {
+      return 'Good to Excellent'
+    }
+    return this.card.credit_rating
+  }
+}
 </script>
 
 <style scoped>
@@ -132,7 +122,7 @@ h6 {
   font-size: 1.4em;
   line-height: 1.8em;
   text-transform: uppercase;
-  padding: 8px 0;
+  padding: 0.5em 0;
 }
 
 .card {
@@ -152,8 +142,12 @@ h6 {
   max-width: 1000px;
 }
 
+.card-img {
+  max-width: 280px;
+}
+
 .apply-now {
-  padding-top: 15px;
+  padding: 1em;
 }
 
 .card-details {
@@ -198,6 +192,7 @@ h6 {
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-column-gap: 26px;
   text-align: left;
+  margin-top: 1em;
 }
 
 .benefits > div {
@@ -212,8 +207,18 @@ h6 {
   line-height: 1.8em;
 }
 
-.what-we-like {
+.highlights {
   grid-column: -1 / 1;
   font-size: 1.4em;
+  text-align: left;
+}
+
+@media screen and (max-width: 699px) {
+  .card {
+    grid-template-columns: 1fr;
+  }
+  .benefits {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
