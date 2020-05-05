@@ -12,7 +12,7 @@ export type ISSUER = {
   show_fee_link: boolean
 }
 
-type CARD_DETAIL = {
+export type CARD_DETAIL = {
   affiliate_link: string
   affiliate_link_deactivate: boolean
   annual_fee: string
@@ -48,7 +48,7 @@ type CARD_DETAIL = {
   tracking_pixel: string
 }
 
-type CARD = {
+export type CARD = {
   updated_date: string
   card_type: string
   credit_rating: string

@@ -3,26 +3,30 @@
     <div>
       <h1 class="title">CC Huntin Fool</h1>
       <h2 class="subtitle">Find Credit Cards based on user preferences</h2>
-      <cc-form @submitted="handleSubmit" />
-      <pre>{{ JSON.stringify(cards, null, 2) }}</pre>
+      <cc-form @submitted="handleSubmit" v-show="!formSubmitted" />
+      <card-list
+        @showForm="handleShowForm"
+        v-bind:cards="cards"
+        v-show="formSubmitted"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import '~/assets/global.css'
+
 import { Component, Vue } from 'nuxt-property-decorator'
 import ccForm from '~/components/CCForm.vue'
+import CardList from '~/components/CardList.vue'
 
 @Component({
   components: {
-    ccForm
+    ccForm,
+    CardList
   }
 })
 export default class Index extends Vue {
-  // async asyncData({ store }: { store: any }) {
-  //   const { data } = await axios.get(`/data/fool_cc_compare.json`)
-  //   return { cards: data }
-  // },
   formSubmitted = false
 
   get cards() {
@@ -32,6 +36,10 @@ export default class Index extends Vue {
 
   handleSubmit() {
     this.formSubmitted = true
+  }
+
+  handleShowForm() {
+    this.formSubmitted = false
   }
 }
 </script>
