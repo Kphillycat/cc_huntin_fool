@@ -17,8 +17,6 @@
 </template>
 
 <script lang="ts">
-import '~/assets/global.css'
-
 import { Component, Vue } from 'nuxt-property-decorator'
 import ccForm from '~/components/CCForm.vue'
 import CardList from '~/components/CardList.vue'
@@ -38,7 +36,6 @@ export default class Index extends Vue {
     if (this.formSubmitted) {
       if (filteredCards.length === 0) {
         this.error = true
-        return filteredCards
       }
       return filteredCards
     }
