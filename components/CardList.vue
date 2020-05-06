@@ -4,7 +4,12 @@
       <div>
         <h3>Here's our list of recommended Credit Cards for you</h3>
       </div>
-      <card v-for="(card, index) in cardsList" :card="card" :key="index" />
+      <card
+        v-for="(card, index) in cardsList"
+        :card="card"
+        :key="index"
+        :maintenanceText="maintenanceText"
+      />
       <button @click="goBack" class="btn go-back">
         Click here to Start Over
       </button>
@@ -34,6 +39,10 @@ export default class CardList extends CardListProps {
     if (!this.cards) return []
     const { card1, card2 } = this.cards[0]
     return [card1, card2]
+  }
+
+  get maintenanceText() {
+    return this.cards[0].maintenance_text
   }
 
   goBack() {

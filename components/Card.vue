@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-wrapper">
       <div>
-        <a :href="'https://www.fool.com' + card.redirect_url" target="_blank">
+        <a :href="applyNowLink" target="_blank">
           <img
             class="card-img"
             :src="card.offer_image"
@@ -12,7 +12,12 @@
       </div>
 
       <div class="apply-now">
-        <a :href="'https://www.fool.com' + card.redirect_url" target="_blank">
+        <div v-show="card.affiliate_link_deactivate" v-html="maintenanceText" />
+        <a
+          v-show="!card.affiliate_link_deactivate"
+          :href="applyNowLink"
+          target="_blank"
+        >
           <span class="btn">Apply Now</span>
         </a>
       </div>
@@ -24,7 +29,11 @@
           <span v-html="card.bottom_line" />
         </h3>
         <div class="card-title">
-          <a :href="'https://www.fool.com' + card.redirect_url" target="_blank">
+          <a
+            v-show="!card.affiliate_link_deactivate"
+            :href="applyNowLink"
+            target="_blank"
+          >
             {{ card.offer_name }}
           </a>
         </div>
@@ -93,7 +102,8 @@ import StarRating from '~/components/StarRating.vue'
 
 const CardProps = Vue.extend({
   props: {
-    card: Object as PropType<CARD_DETAIL>
+    card: Object as PropType<CARD_DETAIL>,
+    maintenanceText: String
   }
 })
 
@@ -107,7 +117,17 @@ export default class Card extends CardProps {
     if (this.card.credit_rating === 'goodexcellent') {
       return 'Good to Excellent'
     }
+    if (this.card.credit_rating.includes('fair')) {
+      return 'Fair'
+    }
     return this.card.credit_rating
+  }
+
+  get applyNowLink() {
+    if (this.card.affiliate_link_deactivate) {
+      return ''
+    }
+    return `https://www.fool.com${this.card.redirect_url}`
   }
 }
 </script>
@@ -180,9 +200,8 @@ h6 {
 
 .credit-rating h6 .credit-rating_req {
   font-weight: normal;
-  text-transform: none;
   color: #1c1d20;
-  /* text-transform: capitalize; */
+  text-transform: capitalize;
   font-weight: 400;
 }
 
